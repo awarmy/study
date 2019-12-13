@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>contenteditable</title>
+    <style>
+        .content:empty::before{
+            content: attr(placeholder);
+            font-size: 14px;
+            color: #CCC;
+            line-height: 21px;
+            padding-top: 10px;
+        }
+        .edit:empty::before{
+            content:attr(placeholder)
+        }
+    </style>
+</head>
+<body>
+<div id="content" contenteditable="true" class="content" placeholder="输入内容">
+        <div class="feedback_mix_img" contenteditable="false" data-type="image">
+                <img src="https://imgm.gmw.cn/attachement/jpg/site215/20191213/8073920855106603968.jpg">
+                <div class="operator_item">
+                    <div class="circle">
+                        <div class="up" data-action="up"></div>
+                    </div>
+                    <div class="circle">
+                        <div class="down" data-action="down"></div>
+                    </div>
+                    <div class="circle change changeImage">更改图片</div>
+                </div>
+                <div class="del_item" data-action="del">
+                    <div></div>
+                </div>
+            </div>
+</div>
+参考地址：https://blog.csdn.net/lqyygyss/article/details/81773516
+</body>
+</html>
