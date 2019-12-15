@@ -1,0 +1,21 @@
+{
+    
+    "presets": [
+        ["@babel/preset-env",
+        {
+            //"targets": ['> 1%', 'last 2 versions']
+            "targets": {
+                "browsers": ["> 1%", "last 2 versions", "not ie <=8"]
+                //node:'12.4.0'
+                //chrome:'59'
+                //占有率
+            }
+        }
+        ]
+    ],
+    //局部垫片
+    "plugins": [
+        ["@babel/transform-runtime"]
+    ]
+    //Babel-preset-env 是一个合集，分 es2015 es2016
+}
