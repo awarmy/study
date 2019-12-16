@@ -1,0 +1,29 @@
+*{margin:0px;}
+body{
+    font-size:16px;
+}
+/*全局样式*/
+:global .border-box{
+    border:solid 1px red;
+}
+/*局部样式定义*/
+:local .div{
+    composes:mydiv from "./css-inhert.css";
+    background-color: red;
+}
+
+
+.bg1{background-image: url(../img/p1-1.png);height:100px;background-repeat: no-repeat;}
+.bg2{background: url(../img/p1-2.png) no-repeat;height:100px;}
+
+@font-face { 
+    font-family: "iconfont";
+    src: url("../fonts/iconfont.eot");
+    src: url("../fonts/iconfont.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/iconfont.woff") format("woff"),
+    url("../fonts/iconfont.ttf") format("truetype"),
+    url("../fonts/iconfont.svg#iconfont") format("svg");
+}
+
+.i-home:before{content:"\f109";font-family: 'iconfont';}
+.i-success:before{content:"\f10a";font-family: 'iconfont';}
