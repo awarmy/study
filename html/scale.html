@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Image rotate</title>
+    <style>
+    ul,li{margin: 0;padding:0px;}
+    li{width:33%;float:left;text-align:center;list-style: none;}
+
+    </style>
+</head>
+<body>
+<div id="chooseBox" style="position: relative; overflow: hidden;width:347px;height:452px;margin: auto;">
+</div>
+<ul>
+    <li><div class="input-upload" id="uploadcover" style="width:100px;height:30px;position:relative;">
+        <button class="btn add-btn">上传</button>
+    </div></li>
+    <li><button id="crop_btn">裁剪</button></li>
+    <li><button class="btn add-btn" id="btnRotate">旋转</button></li>
+</ul>
+
+
+
+
+
+
+
+<img src="" id="result" alt="">
+ <script>
+     "use strict";
+
+        var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+        function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+    var UploadFile = function () {
+        function UploadFile() {
+            var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                _ref$selector = _ref.selector,
+                selector = _ref$selector === undefined ? "" : _ref$selector,
+                _ref$callback = _ref.callback,
+                callback = _ref$callback === undefined ? function () { } : _ref$callback;
+
+            _classCallCheck(this, UploadFile);
+
+            this.selector = selector;
+            this.callback = callback;
+            this.init();
+        }
+
+        _createClass(UploadFile, [{
+            key: "init",
+            value: function init() {
+                var self = this;
+                this.events = {};
+                //判断元素
+                if (this.selector && document.querySelector(this.selector)) {
+                    this.el = document.querySelector(this.selector);
+                } else {
+                    this.el = document.createElement("div");
+                }
+                this.el.classList.add("upload-box");
+
+                this.oInput = document.createElement("input");
+                this.oInput.setAttribute("type", "file");
+                this.oInput.setAttribute("name", "uploadFile");
+                this.oInput.setAttribute("id", "uploadFile");
+                this.oInput.setAttribute("accept", "image/*");
+                this.oInput.style.position = "absolute";
+                this.oInput.style.width = "100%";
+                this.oInput.style.height = "100%";
+                this.oInput.style.top = 0;
+                this.oInput.style.left = 0;
+                this.oInput.style.opacity = 0;
+                this.el.appendChild(this.oInput);
+
+                this.reader = new FileReader();
+                this.reader.addEventListener("loadstart", this.onLoadStart.bind(this), false);
+                this.reader.addEventListener("progress", this.onProgress.bind(this), false);
+                this.reader.addEventListener("abort", this.onAbort.bind(this), false);
+                this.reader.addEventListener("load", this.onFinish.bind(this), false);
+                this.reader.addEventListener("loadend", this.onLoadEnd.bind(this), false);
+                this.reader.addEventListener("error", this.onError.bind(this), false);
+
+                this.oInput.addEventListener("change", function () {
+                    self.readAsDataURL(this.files[0]);
+                }, false);
+            }
+        }, {
+            key: "readAsDataURL",
+            value: function readAsDataURL(_file) {
+                this.handleFile(_file);
+                this.reader.readAsDataURL(_file);
+            }
+        }, {
+            key: "readAsArrayBuffer",
+            value: function readAsArrayBuffer(_file) {
+                this.handleFile(_file);
+                this.reader.readAsArrayBuffer(_file);
+            }
+        }, {
+            key: "readAsBinaryString",
+            value: function readAsBinaryString(_file) {
+                this.handleFile(_file);
+                this.reader.readAsBinaryString(_file);
+            }
+        }, {
+            key: "readAsText",
+            value: function readAsText(_file) {
+                this.handleFile(_file);
+                this.reader.readAsText(_file);
+            }
+        }, {
+            key: "handleFile",
+            value: function handleFile(_file) {
+                this.file = {
+                    name: _file.name,
+                    size: _file.size,
+                    type: _file.type,
+                    file: _file
+                };
+            }
+            //监听事件
+
+        }, {
+            key: "on",
+            value: function on(type, handler) {
+                this.events[type] = this.events[type] || [];
+                this.events[type].push(handler);
+            }
+            //删除事件
+
+        }, {
+            key: "off",
+            value: function off(type, handler) {
+                if (arguments.length == 0) {
+                    for (var _name in this.events) {
+                        delete this.events[_name];
+                    }
+                    return this;
+                }
+                if (arguments.length == 1 && {}.toString.call(arguments[0]) == "[object String]") {
+                    this.events[type] = [];
+                    return this;
+                }
+                if (arguments.length == 1 && {}.toString.call(arguments[0]) == "[object Function]") {
+                    for (var name in this.events) {
+                        for (var i = 0, len = this.events[name].length; i < len; i++) {
+                            if (this.events[name][i] == arguments[0]) {
+                                this.events[name].splice(i, 1);
+                            }
+                        }
+                    }
+                    return this;
+                }
+                for (var i = 0, len = this.events[type].length; i < len; i++) {
+                    this.events[type].slice(i, 1);
+                }
+
+                return this;
+            }
+            //触发事件
+
+        }, {
+            key: "trigger",
+            value: function trigger(type, data) {
+                if (arguments.length == 0 || {}.toString.call(arguments[0]) != "[object String]") return this;
+                if (!this.events[type]) return;
+                for (var i = 0, len = this.events[type].length; i < len; i++) {
+                    this.events[type][i].call(this, data);
+                }
+                return this;
+            }
+            //文件开始上传
+
+        }, {
+            key: "onLoadStart",
+            value: function onLoadStart() {
+                this.trigger("loadstart");
+            }
+            /*文件上传进度*/
+
+        }, {
+            key: "onProgress",
+            value: function onProgress() {
+                this.trigger("loadprogress", { loaded: arguments[0].loaded, total: arguments[0].total });
+            }
+            //文件上传完成
+
+        }, {
+            key: "onFinish",
+            value: function onFinish() {
+                this.onCompass(arguments[0].target.result);
+                this.trigger("loadfinish", { result: arguments[0].target.result });
+            }
+            //文件上传取消
+
+        }, {
+            key: "onAbort",
+            value: function onAbort() {
+                this.trigger("loadabort");
+            }
+            //文件上传失败
+
+        }, {
+            key: "onError",
+            value: function onError() {
+                this.trigger("loaderror");
+            }
+            //文件无论是否上传完成都会调用
+
+        }, {
+            key: "onLoadEnd",
+            value: function onLoadEnd() {
+                this.trigger("loadend");
+            }
+            //压缩图片
+
+        }, {
+            key: "onCompass",
+            value: function onCompass(url) {
+                var self = this;
+                this.trigger("compassstart");
+                var tmp = document.createElement("canvas");
+                var ctx = tmp.getContext("2d");
+                var img = new Image();
+                img.onload = function () {
+
+                    tmp.width = img.width / 2;
+                    tmp.height = img.height / 2;
+                    ctx.drawImage(this, 0, 0, img.width, img.height, 0, 0, tmp.width, tmp.height);
+                    self.trigger("compassend", { result: tmp.toDataURL(self.file.type) });
+
+                    // if (EXIF) {
+                    //   EXIF.getData(self.file.file, function () {
+                    //     EXIF.getAllTags(this);
+                    //     var Orientation = EXIF.getTag(this, 'Orientation');
+                    //     self.callback(tmp.toDataURL(self.file.type, .96), self.file, Orientation);
+                    //   });
+                    // } else {
+                    //   self.callback(tmp.toDataURL(self.file.type, .96), self.file, 0);
+                    // }
+                };
+                img.src = url;
+            }
+        }]);
+
+        return UploadFile;
+    }();
+    
+    //WFinger
+    ; (function () {
+        var defaultOptions = {
+            el_move: function () { },
+            el_scale: function () { },
+            el_rotate: function () { }
+        }
+
+        function calc_distance(point0, point1) {
+            var x = point1.pageX - point0.pageX, y = point1.pageY - point0.pageY;
+            return Math.sqrt(x * x + y * y);
+        }
+
+        function calc_zoom(distance0, distance1) {
+            return distance1 / distance0;
+        }
+
+        function calc_angle(point0, point1) {
+            var x = point1.pageX - point0.pageX, y = point1.pageY - point0.pageY,
+                a = Math.atan2(y, x);
+            return a * 180 / Math.PI; //弧度转角度，方便调试
+        }
+
+        var WFinger = function (el, option) {
+            var options = Object.assign(defaultOptions, option);
+            console.log(options);
+            this.start = this.start.bind(this);
+            this.move = this.move.bind(this);
+            this.end = this.end.bind(this);
+            this.cancel = this.cancel.bind(this);
+
+            this.el = typeof el == 'string' ? document.querySelector(el) : el;
+            this.el.addEventListener('touchstart', this.start, false);
+            this.el.addEventListener('touchmove', this.move, false);
+            this.el.addEventListener('touchend', this.end, false);
+            this.el.addEventListener('touchcancel', this.cancel, false);
+
+            this.el_move = options.el_move;
+            this.el_scale = option.el_scale;
+            this.el_rotate = option.el_rotate;
+
+            this.tap = false;
+            this.prev = { x: 0, y: 0 };
+            this.prevAngle = null;
+            this.delta_data = {};
+            this.zoom_data = 1;
+            this.rotate_data = 0;
+            this.pinchLength = 0;
+
+
+        }
+
+        var _proto = WFinger.prototype;
+        Object.defineProperties(_proto, {
+            "delta": {
+                get: function () {
+                    return this.delta_data;
+                },
+                set: function (value) {
+                    this.el_move(value);
+                    this.delta_data = value;
+                }
+            },
+            "zoom": {
+                get: function () {
+                    return this.zoom_data;
+                },
+                set: function (value) {
+                    this.el_scale(value);
+                    this.zoom_data = value;
+                }
+            },
+            "rotate": {
+                get: function () {
+                    return this.rotate_data;
+                },
+                set: function (value) {
+                    this.el_rotate(value);
+                    this.rotate_data = value;
+                }
+            }
+        });
+
+
+        _proto.start = function (ev) {
+            if (!ev.touches) return;
+            ev.stopPropagation();
+            ev.preventDefault();
+            if (ev.touches.length > 1) {
+                this.tap = false;
+                this.pinchLength = calc_distance(ev.touches[0], ev.touches[1]);
+            }
+            else {
+                this.tap = true;
+                this.prev = { x: ev.touches[0].pageX, y: ev.touches[0].pageY };
+            }
+
+        }
+        _proto.move = function (ev) {
+            if (!ev.touches) return;
+            ev.stopPropagation();
+            ev.preventDefault();
+
+            if (ev.touches.length > 1) {
+                var pinchLength = calc_distance(ev.touches[0], ev.touches[1]),
+                    zoom = calc_zoom(this.pinchLength, pinchLength),
+                    angle = calc_angle(ev.touches[0], ev.touches[1]);
+                this.pinchLength = pinchLength;
+                this.zoom = zoom;
+                if (this.prevAngle === null) {
+                    this.prevAngle = angle;
+                }
+                else {
+                    var rotate = angle - this.prevAngle;
+                    this.prevAngle = angle;
+                    this.rotate = rotate;
+                    //console.log("rotate=",rotate);
+                }
+
+            }
+            else {
+                if (this.tap) {
+                    var diffX = ev.touches[0].pageX - this.prev.x,
+                        diffY = ev.touches[0].pageY - this.prev.y;
+                    this.delta = { deltaX: diffX, deltaY: diffY };
+                    this.prev = { x: ev.touches[0].pageX, y: ev.touches[0].pageY };
+                }
+
+            }
+
+        }
+        _proto.end = function (ev) {
+            this.prevAngle = null;
+        }
+        _proto.cancel = function (e) {
+
+        }
+
+        if (typeof module != 'undefined' && typeof exports === 'object') {
+            module.exports = WFinger;
+        }
+        else {
+            window.WFinger = WFinger;
+        }
+
+    })()
+
+
+
+    ; (function (window) {
+                var defaultOptions = {
+                    x: 0,
+                    y: 0,
+                    imgWidth: 0,
+                    imgHeight: 0,
+                    offsetX: 0,
+                    offsetY: 0,
+                    mastWidth: 0,
+                    mastHeight: 0,
+                    view: '',
+                    viewWidth: 0,
+                    viewHeight: 0,
+                    file: '',
+                    btn: '',
+                    rotate:0,
+                    rotating:false,
+                    img:null
+                }
+                var WphotoClipMobile = function (options) {
+                    this.options = Object.assign(defaultOptions, options);
+                    this.init();
+                }
+                var _proto = WphotoClipMobile.prototype;
+
+                _proto.init = function () {
+                    var self = this;
+                    var uf = new UploadFile({
+                        selector: self.options.file
+                    });
+                    uf.on("loadstart", function () {
+                        self.initMast();
+                    })
+                    uf.on("loadfinish", function (e) {
+                        self.options.img = e.result;
+                        // console.log(self.options.img);
+                        self.loadimg(e.result);
+                    });
+
+                    new WFinger(self.options.view, {
+                        el_move: function (evt) {
+                            self.options.x += evt.deltaX;
+                            self.options.y += evt.deltaY;
+                            self.checkAttr();
+                        },
+                        el_scale: function (zoom) {
+                            console.log("zoom=", zoom);
+                            self.scale(zoom);
+                        },
+                        el_rotate: function (rotate) {
+                            if(rotate>4  && self.options.rotating === false){
+                                self.options.rotating = true;
+                                self.rotate();
+                            }
+                            console.log("el_rotate=", rotate);
+                        }
+                    });
+                    // new AlloyFinger(document.querySelector(self.options.view), {
+                    //   multipointStart: function () {
+                    //     //initScale = 1;
+                    //         },
+                    //   pressMove: function (evt) {
+                    //     if (self.options.rotating) return;
+                    //     console.log(evt.deltaX,evt.deltaY);
+                    //             self.options.x += evt.deltaX;
+                    //             self.options.y += evt.deltaY;
+                    //             self.checkAttr();
+                    //   },
+                    //   rotate: function (evt) {
+                    //       alert(evt);
+                    //       if(evt>2 && self.options.rotating === false){
+                    //           self.options.rotating = true;
+                    //           self.rotate();
+                    //       }
+                    //     //self.img.rotation += evt.angle;
+                    //   },
+                    //   pinch: function (evt) {
+                    //       if (self.options.rotating) return;
+                    //       self.scale(evt.zoom);
+                    //   }
+                    //     });
+
+                    document.querySelector(self.options.btn).addEventListener("click", function (e) {
+                        self.clip();
+                    })
+                }
+
+                _proto.checkAttr = function () {
+                    if (this.options.x > this.options.offsetX) {
+                        this.options.x = this.options.offsetX;
+                    }
+                    else if (this.options.x < this.options.viewWidth - this.options.offsetX - this.options.imgWidth) {
+                        this.options.x = this.options.viewWidth - this.options.offsetX - this.options.imgWidth;
+                    }
+
+                    if (this.options.y > this.options.offsetY) {
+                        this.options.y = this.options.offsetY;
+                    }
+                    else if (this.options.y < this.options.viewHeigh - this.options.offsetY - this.options.imgHeight) {
+                        this.options.y = this.options.viewHeigh - this.options.offsetY - this.options.imgHeight
+                    }
+                    this.imgAttr();
+                }
+
+                _proto.imgAttr = function () {
+                    this.img.style.width = this.options.imgWidth + 'px';
+                    this.img.style.height = this.options.imgHeight + 'px';
+                    this.img.style.left = this.options.x + 'px';
+                    this.img.style.top = this.options.y + 'px';
+                    this.img.style.width = this.options.imgWidth;
+                    this.img.style.height = this.options.imgHeight;
+                }
+
+                _proto.initMast = function () {
+                    var view = document.querySelector(this.options.view);
+                    view.style.position = "relative";
+                    view.style.overflow = "hidden";
+                    view.addEventListener("touchmove", function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+
+                    this.options.viewWidth = view.clientWidth;
+                    this.options.viewHeight = view.clientHeight,
+                        this.options.diffWidth = (this.options.viewWidth - this.options.mastWidth) / 2;
+                    this.options.diffHeight = (this.options.viewHeigh - this.options.mastHeight) / 2;
+                    var _width = this.options.mastWidth,
+                        _height = this.options.mastHeight;
+
+                    this.img = document.createElement("img");
+                    this.img.setAttribute("class", "picWphotoClipMobile");
+                    this.img.setAttribute("style", "position: absolute;");
+
+                    var div = document.createElement("div");
+                    div.setAttribute("class", "photo-clip-mask");
+                    div.setAttribute("style", "position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; pointer-events: none;");
+
+                    var html = '<div class="photo-clip-mask-left" style="position: absolute; left: 0px; right: 50%; top: 50%; bottom: 50%; margin-right: ' + (_width / 2) + 'px; margin-top: -' + (_height / 2) + 'px; margin-bottom: -' + _height / 2 + 'px; background-color: rgba(0, 0, 0, 0.5);"></div>';
+                    html += '<div class="photo-clip-mask-right" style="position: absolute; left: 50%; right: 0px; top: 50%; bottom: 50%; margin-left: ' + (_width / 2) + 'px; margin-top: -' + (_height / 2) + 'px; margin-bottom: -' + (_height / 2) + 'px; background-color: rgba(0, 0, 0, 0.5);"></div>';
+                    html += '<div class="photo-clip-mask-top" style="position: absolute; left: 0px; right: 0px; top: 0px; bottom: 50%; margin-bottom: ' + (_height / 2) + 'px; background-color: rgba(0, 0, 0, 0.5);"></div>';
+                    html += '<div class="photo-clip-mask-bottom" style="position: absolute; left: 0px; right: 0px; top: 50%; bottom: 0px; margin-top: ' + (_height / 2) + 'px; background-color: rgba(0, 0, 0, 0.5);"></div>';
+                    html += '<div class="photo-clip-area" style="border: 1px dashed rgb(221, 221, 221); position: absolute; left: 50%; top: 50%; width: ' + _width + 'px; height: ' + _height + 'px; margin-left: -' + (_width / 2) + 'px; margin-top: -' + _height / 2 + 'px;"></div>';
+                    view.appendChild(this.img);
+                    view.appendChild(div);
+                    div.innerHTML = html;
+                }
+
+                _proto.scale = function (zoom) {
+                    var scale = 1;
+                    if (zoom > 1) {
+                        scale = (zoom - 1) / 3 + 1
+                    }
+                    else {
+                        scale = zoom;
+                    }
+                    var w = this.options.imgWidth * scale, h = this.options.imgHeight * scale;
+                    if (w < this.options.mastWidth || h < this.options.mastHeight) {
+                        return;
+                    }
+                    this.options.x += (1 - scale) * this.options.imgWidth / 2, this.options.y += (1 - scale) * this.options.imgHeight / 2;
+                    this.options.imgWidth = w;
+                    this.options.imgHeight = h;
+                    this.checkAttr();
+                }
+
+                _proto.rotate = function(){
+                    //旋转图片
+                    var self = this;
+                    this.options.rotate++;
+                    this.options.rotate = this.options.rotate % 4;
+                    var rotate = this.options.rotate
+                    var img = new Image();
+                    img.onload = function(){
+                        var canvasW = this.width,
+                        canvasH = this.height;
+                        //新建canvas旋转
+                        var canvas = document.createElement("canvas"),
+                            tempContext = canvas.getContext("2d");
+                        switch (rotate) {
+                            case 1:
+                                canvas.width = canvasH;
+                                canvas.height = canvasW;
+                                tempContext.rotate(90 * Math.PI / 180);
+                                tempContext.drawImage(img, 0, -canvasH, canvasW, canvasH);
+                                break;
+                            case 2:
+                                canvas.width = canvasW;
+                                canvas.height = canvasH;
+                                tempContext.rotate(180 * Math.PI / 180);
+                                tempContext.drawImage(img, -canvasW, -canvasH, canvasW, canvasH);
+                                break;
+                            case 3:
+                                canvas.width = canvasH;
+                                canvas.height = canvasW;
+                                tempContext.rotate(270 * Math.PI / 180);
+                                tempContext.drawImage(img, -canvasW, 0, canvasW, canvasH);
+                                break;
+                            default:
+                                canvas.width = canvasW;
+                                canvas.height = canvasH;
+                                tempContext.rotate(0 * Math.PI / 180);
+                                tempContext.drawImage(img, 0, 0, canvasW, canvasH);
+
+                        }
+                        var url = canvas.toDataURL();
+                        self.loadimg(url);
+                    }
+                    img.src = this.options.img;
+                }
+
+                _proto.loadimg = function (src) {
+                    var self = this,
+                        img = new Image;
+                    img.onload = function () {
+                        var view = document.querySelector(self.options.view);
+                        self.options.viewWidth = view.clientWidth;
+                        self.options.viewHeigh = view.clientHeight;
+                        self.options.offsetX = (self.options.viewWidth - self.options.mastWidth) / 2;
+                        self.options.offsetY = (self.options.viewHeight - self.options.mastHeight) / 2;
+                        if (this.width > this.height) {
+                            self.options.y = 0,
+                                self.options.imgHeight = self.options.viewHeigh,
+                                self.options.imgWidth = this.width / this.height * self.options.imgHeight;
+                            self.options.left = (self.options.viewWidth - self.options.imgWidth) / 2;
+                        }
+                        else {
+                            self.options.x = 0,
+                                self.options.imgWidth = self.options.viewWidth,
+                                self.options.imgHeight = this.height / this.width * self.options.imgWidth,
+                                self.options.y = (self.options.viewHeight - self.options.imgHeight) / 2;
+                        }
+                        self.imgAttr();
+                        self.img.src = src;
+                        self.options.rotating = false;
+                    }
+                    img.src = src;
+                }
+                _proto.clip = function () {
+                    var canvas = document.createElement("canvas");
+                    var ctx = canvas.getContext("2d");
+                    // img = $(".pic").get(0);
+                    canvas.width = this.options.mastWidth, canvas.height = this.options.mastHeight
+                    ctx.drawImage(this.img, this.options.x - this.options.offsetX, this.options.y - this.options.offsetY, this.options.imgWidth, this.options.imgHeight);
+                    var dataURL = canvas.toDataURL("image/jpeg");
+                    this.options.clipFinish(dataURL);
+                    //$(".pic").attr({"src":canvas.toDataURL("image/jpeg")});
+                }
+                window.WphotoClipMobile = WphotoClipMobile;
+            })(window)
+
+
+    var obj = new WphotoClipMobile({
+        'file': "#uploadcover",
+        mastWidth: 330,
+        mastHeight: 186,
+        view: '#chooseBox',
+        btn: "#crop_btn",
+        clipFinish: function (dataURL) {
+            //app.savePostPic(dataURL)
+            document.getElementById("result").src=dataURL;
+        }
+    });
+
+    //测试代码
+    document.getElementById("btnRotate").addEventListener("click",function(){
+        obj.rotate();
+    })
+ </script>   
+
+</body>
+</html>
