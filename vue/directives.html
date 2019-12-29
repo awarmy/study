@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue 自定义指令</title>
+</head>
+<body>
+    <div id="app" class="app">
+        <button>自定义指令</button>
+        <p>****************************</p>
+        <p v-uppper-word="info"></p>
+        <p v-lower-case="message"></p>
+    </div>
+<script src="../vue.js"></script>
+<!--script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script-->
+<script src="../axios.min.js"></script>
+<script>
+
+//注册全局指令
+Vue.directive(
+    'uppper-word',
+    function(el,binding){
+        console.log(el,binding);
+        el.textContent = binding.value.toUpperCase();
+    }
+)
+
+var app = new Vue({
+    el:'#app', //挂载点
+    data() {
+        return{
+            info:'Hello World!',
+            message:"Hello world!",
+        }
+    },//自定义局部定义
+    directives:{
+        'lower-case':function(el,binding){
+            el.textContent = binding.value.toLowerCase();
+        }
+    }
+})
+</script>
+</body>
+</html>
