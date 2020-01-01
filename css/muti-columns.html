@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>多列布局</title>
+</head>
+<body>
+<h2>两列布局，定宽+自适应</h2>
+<style>
+.parent0{width:100%;background-color: gray;}
+.parent0 .left{width:200px;float:left;}
+.parent0 .left p{background: #666;}
+.parent0 .right{margin-left:220px;}
+.parent0 .right p{background: #999;}
+</style>
+<div class="parent0">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right</p>
+        <p>right</p>
+    </div>
+</div>
+<p>BFC原理</p>
+<style>
+    p{margin:0px;padding:0px;}
+    .parent1 {
+        width: 100%;
+        background-color: gray;
+        margin:0px auto;
+        padding: 0px;
+    }
+
+    .parent1 .left {
+        width: 200px;
+        float: left;
+        margin-right:20px;
+    }
+
+    .parent1 .left p {
+        background: #666;
+    }
+
+    .parent1 .right {
+        overflow: hidden;
+    }
+
+    .parent1 .right p {
+        background: #999;
+    }
+</style>
+
+<div class="parent1">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right</p>
+        <p>right</p>
+    </div>
+</div>
+<p>display table</p>
+<style>
+.parent2 {
+        width: 100%;
+        background-color: gray;
+        margin:0px auto;
+        padding: 0px;
+        display: table;
+        table-layout: fixed;
+        /*table 布局优先*/
+    }
+
+    .parent2 .left {
+        width: 200px;
+        padding-right:20px;
+        display: table-cell;
+    }
+
+    .parent2 .left p {
+        background: #666;
+    }
+
+    .parent2 .right {
+        display: table-cell;
+    }
+
+    .parent2 .right p {
+        background: #999;
+    }
+</style>
+<div class="parent2">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right</p>
+        <p>right</p>
+    </div>
+</div>
+<h2>FLEX</h2>
+<style>
+.parent3 {
+        width: 100%;
+        background-color: gray;
+        margin:0px auto;
+        padding: 0px;
+        display: flex;
+    }
+
+    .parent3 .left {
+        width: 200px;
+        padding-right:20px;
+    }
+
+    .parent3 .left p {
+        background: #666;
+    }
+
+    .parent3 .right {
+        flex:1
+    }
+
+    .parent3 .right p {
+        background: #999;
+    }
+</style>
+<div class="parent3">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right</p>
+        <p>right</p>
+    </div>
+</div>
+<h2>三列 float left</h2>
+<style>
+.parent4 {
+        width: 100%;
+        background-color: gray;
+        margin:0px auto;
+        padding: 0px;
+        
+    }
+
+    .parent4 .left,.parent4 .center {
+        width: 100px;
+        padding-right:20px;
+        float:left;
+    }
+    .parent4 .center p{background: red;}
+    .parent4 .left p {
+        background: #666;
+    }
+
+    .parent4 .right {
+        /* flex:1 */
+        overflow: hidden;
+    }
+
+    .parent4 .right p {
+        background: #999;
+    }
+</style>
+<div class="parent4">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="center">
+        <p>center</p>
+    </div>
+    <div class="right">
+        <p>right</p>
+        <p>right</p>
+    </div>
+</div>
+<h2>三列 display:flex</h2>
+<style>
+    .parent5 {
+        width: 100%;
+        background-color: gray;
+        margin: 0px auto;
+        padding: 0px;
+        display: flex;
+    }
+
+    .parent5 .left,
+    .parent5 .center {
+        width: 100px;
+        padding-right: 20px;
+    }
+
+    .parent5 .center p {
+        background: red;
+    }
+
+    .parent5 .left p {
+        background: #666;
+    }
+
+    .parent5 .right {
+        flex:1
+    }
+
+    .parent5 .right p {
+        background: #999;
+    }
+</style>
+<div class="parent5">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="center">
+        <p>center</p>
+    </div>
+    <div class="right">
+        <p>right</p>
+        <p>right</p>
+    </div>
+</div>
+
+<h2>左侧不定宽</h2>
+
+<style>
+    .parent6 {
+        width: 100%;
+        background-color: gray;
+    }
+
+    .parent6 .left {
+        float: left;
+        margin-right:20px;
+    }
+
+    .parent6 .left p {
+        background: #666;
+    }
+
+    .parent6 .right {
+        overflow: hidden;
+    }
+
+    .parent6 .right p {
+        background: #999;
+    }
+</style>
+<div class="parent6">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right</p>
+        <p>right</p>
+    </div>
+</div>
+<h2>宽度不固定</h2>
+<style>
+    .parent7 {
+        width: 100%;
+        background-color: gray;
+        display:table;
+    }
+    .parent7 .left,.parent7 .right{display:table-cell}
+    .parent7 .left {
+        padding-right: 20px;
+        
+    }
+
+    .parent7 .left p {
+        background: #666;
+    }
+
+    .parent7 .right {
+        overflow: hidden;
+    }
+
+    .parent7 .right p {
+        background: #999;
+    }
+    .parent7.ext{table-layout: fixed;}
+    .parent7.ext .left{width:0.1%}
+</style>
+<div class="parent7">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right两边宽度是不相等的</p>
+        <p>right 是有内容决定的</p>
+    </div>
+</div>
+<div class="parent7 ">
+    <div class="left" style="width:0.1%">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right两边宽度是不相等的</p>
+        <p>right 是有内容决定的</p>
+    </div>
+</div>
+<H3>布局优先的时候将挤压内容的宽度</H3>
+<div class="parent7 ext">
+    <div class="left" ><!-- 这里定义了宽度-->>
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right两边宽度是不相等的</p>
+        <p>right 是有内容决定的</p>
+    </div>
+</div>
+<h2>不定宽 FLEX布局</h2>
+<style>
+.parent8 {
+        width: 100%;
+        background-color: gray;
+        display:flex;
+    }
+    .parent8 .left {
+        margin-right: 20px;
+        
+    }
+
+    .parent8 .left p {
+        background: #666;
+        width:100px;
+    }
+
+    .parent8 .right {
+        flex:1;
+    }
+
+    .parent8 .right p {
+        background: #999;
+    }
+</style>
+<div class="parent8">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right两边宽度是不相等的</p>
+        <p>right 是有内容决定的</p>
+    </div>
+</div>
+<h2>多列不定宽</h2>
+<style>
+    .parent9 {
+        width: 100%;
+        background-color: gray;
+        display: flex;
+    }
+
+    .parent9 .left,.parent9 .center {
+        margin-right: 20px;
+
+    }
+    .parent9 .center p{background: red;}
+
+    .parent9 .left p {
+        background: #666;
+        width: 100px;
+    }
+
+    .parent9 .right {
+        flex: 1;
+    }
+
+    .parent9 .right p {
+        background: #999;
+    }
+</style>
+<div class="parent9">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="center">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right两边宽度是不相等的</p>
+        <p>right 是有内容决定的</p>
+    </div>
+</div>
+<h1>等宽布局</h1>
+<h2>FLOAT:LEFT</h2>
+<style>
+.container{width:400px;overflow: hidden;}
+.parent10{background: gray;height:100px;margin-left: -20px;}
+.parent10 .column{float:left;width:25%;padding-left:20px;
+box-sizing: border-box;
+}
+.parent10 .column p{background: black;
+color:white;}
+</style>
+<div class="container">
+    <div class="parent10">
+        <div class="column"><p>1</p></div>
+        <div class="column"><p>2</p></div>
+        <div class="column"><p>3</p></div>
+        <div class="column"><p>4</p></div>
+    </div>
+</div>
+<h2>多列 display:flex</h2>
+<style>
+.parent11{width:400px;display: flex;background: #000;}
+.parent11 .column:nth-child(1),.parent11 .column:nth-child(3){background-color: gray;}
+.parent11 .column:nth-child(4),.parent11 .column:nth-child(2){background-color: red;}
+.parent11 .column{flex:1;}
+/*为什么没有起作用呢*/
+.parent11 .column+.parent11 .column{margin-left:20px;}
+</style>
+<div class="parent11">
+    <div class="column">
+        <p>1</p>
+    </div>
+    <div class="column">
+        <p>2</p>
+    </div>
+    <div class="column">
+        <p>3</p>
+    </div>
+    <div class="column">
+        <p>4</p>
+    </div>
+</div>
+</body>
+</html>
