@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>水平垂直居中</title>
+    <style>
+    .parent{text-align: center;background-color: gray;position: relative;height:50px;}   
+    .child{background-color: black;width:200px;height:50px;color:#fff;}
+    .child01{display:inline-block;}
+    .child02{display:table;margin:0 auto}
+    .child03{position: absolute;left:50%; transform:translate3d(-50%,0,0);}
+
+    .parent01{display:flex;justify-content: center;}
+    .parent02{display:flex}
+    .parent02 .child{margin: 0 auto;}
+
+    .vparent{background-color: gray;position: relative;height:50px;width:100px;}
+    .vchild{width:100%;height:20px;background-color: #000;color:white}
+
+    .vparent01{display: table-cell;vertical-align: middle;}
+    .vparent02{position:relative;}
+    .vparent02 .vchild{position: absolute;top:50%;transform: translate3d(0,-50%,0);}
+
+    .parent03{display: flex;}
+    .parent03 .vchild{height: auto;}
+
+    .parent04{display: flex;align-items: center;}
+    .parent03 .vchild{height: auto;}
+    </style>
+</head>
+<body>
+<div class="parent">
+    <div class="child">默认 align left</div>
+</div>
+<p></p>
+<div class="parent"><div class="child child01">text-align:center 只对 inline-block 有效</div> </div>
+<p></p>
+<div class="parent">
+    <div class="child child02">display table</div>
+</div>
+<p></p>
+<div class="parent">
+    <div class="child child03">transform:translate3d</div>
+</div>
+<p></p>
+<div class="parent parent01">
+    <div class="child">display flex</div>
+</div>
+<p></p>
+<div class="parent parent02">
+    <div class="child">display flex child margin auto</div>
+</div>
+<p></p>
+<div class="vparent vparent01">
+    <div class="vchild">valign</div>
+</div>
+<p></p>
+<div class="vparent vparent02">
+    <div class="vchild">valign</div>
+</div>
+
+<p></p>
+<div class="vparent parent03">
+    <div class="vchild">valign</div>
+</div>
+<p></p>
+<div class="vparent parent04">
+    <div class="vchild">valign</div>
+</div>
+
+<style>
+.p{text-align: center;background-color: gray;position: relative;height:200px;}   
+.c{background-color: black;width:200px;height:50px;color:#fff;}
+
+.p2{display: flex;justify-content: center;align-items: center;}
+.p2 .c{height: auto;}
+
+</style>
+<div class="p p1">
+    <div class="c ">inline-block+text-align<br>
+    table-cell+vertial-align
+    </div>
+</div>
+<p></p>
+<div class="p p2">
+    <div class="c ">flex justify-content align-items
+    </div>
+</div>
+
+</body>
+</html>
