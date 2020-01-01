@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>等高</title>
+</head>
+<body>
+<h2>FLEX 等高</h2>    
+<style>
+.parent{display: flex;}
+.parent .left,.parent .right{flex:1;}
+.parent .left{background-color: #666;margin-right: 20px;}
+.parent .right{background-color: #999;}
+</style>    
+<div class="parent">
+    <div class="left"><p>left</p></div>
+    <div class="right"><p>right</p><p>right</p><p>right</p></div>
+</div> 
+<h2>FLOAT 等高 伪等高</h2>
+<style>
+    .parent0 {
+        
+        background:RED;
+        overflow: hidden;
+    }
+
+    .parent0 .left {
+        background-color: #666;
+        margin-right: 20px;
+        float:left;
+        padding-bottom: 9999px;
+        margin-bottom: -9999px;
+        width:200px;
+        
+    }
+
+    .parent0 .right {
+        background-color: #999;
+        overflow: hidden;
+        height:300px;
+    }
+</style>
+<div class="parent0">
+    <div class="left">
+        <p>left</p>
+    </div>
+    <div class="right">
+        <p>right</p>
+        <p>right</p>
+        <p>right</p><p>right</p>
+        <p>right</p>
+        <p>right</p><p>right</p>
+    </div>
+</div>
+
+
+</body>
+</html>
