@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+    *{margin:0px;padding:0px;}
+    #content{
+        width:200px;
+        height:200px;
+        line-height: 200px;
+        background-color: #ccc;
+        margin:0 auto;
+        font-size:60px;
+        text-align:center;
+        color:#000;
+        cursor: pointer;
+    }
+    </style>
+    <title>防抖函数</title>
+</head>
+<body>
+    <h1>防抖函数，每次触发的时间间隔小于delay,事件函数不会被执行</h1>
+    <div id="content"></div>
+    <script>
+    let num = 1;
+    let oDiv = document.getElementById("content");
+    let changeNum = function(...arguments){
+        oDiv.innerHTML = num++;
+    }
+    // oDiv.addEventListener("mousemove",changeNum);
+    //防抖函数
+    let deBounce = (fn,delay)=>{
+        let timer = null;
+        return function(){
+            /**
+             * 当前函数随 mousemove不停被调用
+             * timer 不停被清除和穿件
+             * 节约了操作DOM节点的时间
+             * */
+            if(timer !== null){
+                clearTimeout(timer);
+            }
+            timer = setTimeout(()=>{
+                fn();
+                console.log(this);
+            },delay);
+        }
+    }
+
+    let deBounce1 = (fn,delay)=>{
+        let timer = null;
+        return function(){
+            if(timer !== null){
+                clearTimeout(timer);
+            }
+            timer = setTimeout(function () {
+                fn();
+                console.log(this);
+            }.bind(this), delay)
+        }
+    }
+
+    let deBounce2 = (fn,delay)=>{
+        let timer = null;
+        return function(...args){
+            if(timer !==null){
+                clearTimeout(timer);
+            }
+            timer = setTimeout(function(){
+                fn(...args);
+            },delay)
+        }
+    }
+
+    oDiv.onmousemove = deBounce2(changeNum,500);
+    </script>
+</body>
+</html>
