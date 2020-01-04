@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>节流函数</title>
+    <style>
+        .div1{
+            width:500px;
+            height: 300px;
+            line-height: 300px;
+            margin: auto;
+            text-align: center;
+        }
+        button{
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+ <h1>当前触发事件时，保证一定时间段内只调用一次事件处理函数</h1>   
+ <div class="div1">
+     <button>防抖按钮</button>
+     <button>节流按钮</button>
+ </div>
+ <script>
+ let fn = ()=>{
+     console.log("我被触发了");
+ }
+ let deBounce = (fn,delay)=>{
+    let timer = null;
+    return function(){
+        if(timer !== null){
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            fn();
+        }, delay);
+    }
+ }
+ let throttle = (fn,delay)=>{
+     let flag = true;
+     return function(){
+         if(!flag){
+             return;
+         }
+         flag = false;
+         setTimeout(()=>{
+             fn();
+             flag = true;
+         },delay);
+     }
+ }
+ let btns = document.querySelectorAll("button");
+ btns[0].onclick = deBounce(fn,500);
+ btns[1].onclick = throttle(fn,2000);
+ </script>
+</body>
+</html>
