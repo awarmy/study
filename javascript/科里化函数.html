@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>科里化函数</title>
+</head>
+<body>
+
+<script>
+let curry = (reg)=>{
+    return (str)=>{
+        return reg.test(str);
+    }
+}
+
+let hasSpace = curry(/\s+/g);
+let arr = ['Hello world!',
+'function','curry function'];
+arr.forEach(str=>{
+    console.log(`'${str}' has space`, hasSpace(str));
+});
+
+let list = [
+    {name:'Tom','age':6},
+    {name:'Jerry','age':5},
+    {name:'Tiger','age':7}
+];
+
+let ages = list.map(item=>{
+    return item.age;
+})
+console.log(`ages=${ages}`);
+
+//科里化
+let cerryAge = function(key){
+    return (obj,index)=>{
+        console.log(`index=${index}`);
+        return obj[key]
+    }
+}
+let age = list.map(cerryAge('age'));
+console.log(age);
+</script>    
+</body>
+</html>
