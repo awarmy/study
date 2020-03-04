@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>视图定位</title>
+    <style>
+    .video{height:300px;background-color: #777;text-align: center;}
+    .pics{height:2000px;background-color: #ccc;}
+    .fixed .video{position: fixed;top:0px;z-index:1;width:100%;}
+    .fixed .pics{margin-top: 300px;}
+    </style>
+</head>
+<body>
+<div class="fixed" id="fixed">
+    <div class="video"><br><br>
+        <button id="btn">锁住</button><br /><br />
+        <input type="file" id="btnfile" multiple value="上传" accept=".jpg,.jpeg">
+    </div>
+    <div class="pics"></div>
+</div>   
+<script>
+var html = "";
+for(var i=0;i<100;i++){
+    html += i + "<br>";
+}
+document.querySelector(".pics").innerHTML = html;
+var btn = document.getElementById("btn");
+btn.addEventListener("click",function(){
+    console.log(btn);
+    if(btn.innerText == "锁住"){
+        btn.innerText = "未锁";
+        document.getElementById("fixed").setAttribute("class","");
+    }
+    else{
+        btn.innerText = "锁住";
+        document.getElementById("fixed").setAttribute("class","fixed");
+    }
+    console.log("click");
+})
+
+btnfile.addEventListener("change", function () {
+    console.log(this.files);
+    
+}, false);
+</script>
+
+</body>
+</html>
