@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mixin</title>
+</head>
+<body>
+    <div id="app" class="app">
+        
+    </div>
+<script src="./js/vue.js"></script>
+<!--script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script-->
+<script src="./js/axios.min.js"></script>
+<script>
+function w_vue_common(){
+    console.log('w_vue_common');
+}    
+w_vue_common.install = function(vue){
+    vue.mixin({
+        data(){
+            return {
+                m:"mixin"
+            }
+        },
+        methods:{
+            w_getUoid: function () {
+                //当前用户编号
+                var voidKey = "vtc_uoid_" + (typeof nodeName !== 'undefined'? nodeName:'warmy');
+                var uoid = localStorage.getItem(voidKey);
+                if (uoid == null || uoid == "") {
+                    uoid = this.w_randUoid();
+                    localStorage.setItem(voidKey, uoid);
+                }
+                return uoid;
+            },
+            w_randomString: function (len) {
+                len = len || 32;
+                var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+                /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+                var maxPos = $chars.length;
+                var pwd = '';
+                for (i = 0; i < len; i++) {
+                    pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+                }
+                return pwd;
+            },
+            w_randUoid: function () {
+                return this.w_randomString(6) + (new Date()).getTime();
+            },
+            w_setCookie: function (c_name, value, expiredays) {
+                var exdate = new Date()
+                exdate.setDate(exdate.getDate() + expiredays)
+                document.cookie = c_name + "=" + escape(value) +
+                    ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
+            },
+            w_getCookie: function (cname) {
+                var arr = document.cookie.match(new RegExp("(^| )" + cname + "=([^;]*)(;|$)"));
+                if (arr != null) return unescape(arr[2]);
+                return null;
+            },
+            w_getQueryString: function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return null;
+            }
+        }
+    })
+}
+Vue.use(w_vue_common);
+var app = new Vue({
+    el:'#app', //挂载点
+    data() {
+        return{
+            info:'Hello World!'
+        }
+    },
+    mounted:function(){
+        var uoid = this.w_getUoid();
+        console.log(uoid);
+    }
+})
+</script>
+</body>
+</html>
