@@ -1,0 +1,1 @@
+.WInput{position:relative;height:20px;font-size:14px}.WInput .WInput_input{position:relative}.WInput.required .WInput_input::after{content:'\e7a3';padding-left:4px;color:red}.WInput input{line-height:20px;padding-left:20px}.WInput span.WInput_prefix{position:absolute;font-family:"font-icon";top:5px;left:4px}.WInput span.WInput_prefix i::before{content:"\e6e3"}
