@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据双向绑定v-model</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="./css/style.min.css">
+    <link rel="stylesheet" href="./css/w-element.min.css">
+    <script src="./components/WInput.js"></script>
+    
+</head>
+
+<body>
+    <div id="app">
+        <h4>使用语法糖，进行数据的双向绑定</h4>
+        <p>message:{{message}}</p>
+        <div class="line"></div>
+        <w-input v-model="message"></w-input>
+        <!-- <i class="el-icon-edit"></i> -->
+    </div>
+    <script>
+        
+        var app = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    message: 'Hello'
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
