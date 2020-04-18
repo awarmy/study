@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WInput的再封装</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="../tools/index.js"></script>
+    <link rel="stylesheet" href="./css/style.min.css">
+    <link rel="stylesheet" href="./css/w-element.min.css">
+    <script src="./components/WInput.js"></script>
+    <style>
+        .noborder .WInput input{border-top:none;border-left: none;border-right: none;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h4>再封装WInput, 侦听WInput上的所有事件</h4>
+        <p>message:{{message}}</p>
+        <div class="line"></div>
+        <w-input-no-border v-model="message" v-on:blur="onBlur" v-bind:class="'noborder'"></w-input-no-border>
+    </div>
+    <script>
+        Vue.component("WInputNoBorder",{
+            template:"\
+                <div>\
+                    <w-input v-bind='$attrs' v-on='$listeners'></w-input>\
+                </div>\
+            ",
+            created:function(){
+                console.log(this.$attrs);
+            },
+            componentName:'input-no-border',
+        })
+        var app = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    message: 'Hello'
+                }
+            },
+            methods:{
+                onBlur:function(){
+                    console.log("onBlur......");
+                }
+            }
+        })
+    </script>
+</body>
+</html>
