@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据双向绑定</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        @font-face {
+            font-family: "font-icon";
+            src: url("https://unpkg.com/element-ui@2.13.1/lib/theme-chalk/fonts/element-icons.woff");
+        }
+        .el-icon-edit{font-family: "font-icon";}
+        .el-icon-edit::before{content:'\e6db';}
+        .WInput{position: relative;height:20px;font-size:14px;}
+        .WInput input{line-height:20px;padding-left:20px;}
+        .WInput span.WInput_prefix{position: absolute;font-family: "font-icon";top:5px;left:4px;}
+        .WInput span.WInput_prefix i::before{content:"\e6e3";}
+        .line{height:1px;background-color: #777777;margin-bottom: 10px;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h4>不使用语法糖，进行数据的双向绑定</h4>
+        <input type="text" v-bind:value="message" v-on:input="onInput">
+        <p>input:{{message}}</p>
+        <div class="line"></div>
+        <w-input v-bind:message="message" v-on:input="recieveMessage" v-on:change="recieveChangeMessage"></w-input>
+    </div>
+    <script>
+        Vue.component("WInput", {
+                template: "\
+            <div class='WInput'>\
+            <input type='text'  v-on:input='onInput' v-on:change='onChange' v-bind:value='value'>\
+            <span class='WInput_prefix'><i></i></span>\
+            </div>",
+                props: {
+                    message:{
+                        required:true,
+                        type:String
+                    }
+                },
+                data: function () {
+                    return {
+                        value: this.message
+                    }
+                },
+                mounted:function(){
+                    console.log("this.message=",this.message);
+                },
+                methods: {
+                    //侦听input
+                    onInput: function (event) {
+                        this.$emit("input", event.target.value);
+                    },
+                    //侦听change
+                    onChange: function (event) {
+                        this.$emit("change", event.target.value);
+                    }
+                }
+            })
+        
+
+        var app = new Vue({
+            el:"#app",
+            data(){
+                return {
+                    message:'Hello'
+                }
+            },
+            mounted:function(){
+
+            },
+            methods:{
+                onInput:function(event)
+                {
+                    this.message = event.target.value;
+                },
+                recieveMessage:function(msg){
+                    this.message = msg;
+                },
+                recieveChangeMessage:function(msg){
+                    this.message = msg;
+                }
+            }
+        })
+    </script>    
+</body>
+</html>
