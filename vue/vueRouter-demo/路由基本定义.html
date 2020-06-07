@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路由基本定义</title>
+    <script src="./js/vue.js"></script>
+    <script src="./js/vue-router.js"></script>
+    <style>
+        .menu{
+            width:200px;margin:auto;
+        }
+        .content{
+            padding:4px;border: solid 1px #c0c0c0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="menu">
+        <div>
+            <router-link to="/about">About</router-link> / 
+            <router-link to="/hello">Hello</router-link>
+        </div> 
+    </div>
+    <div class="content">
+        <router-view></router-view>
+    </div>
+</div>
+<template id="About">
+    <div>About Router</div>
+</template>    
+<template id="Hello">
+    <div>Hello World</div>
+</template>
+<script>
+    //About component
+    var about = Vue.extend({
+        template:"#About"
+    });
+    //Hello component
+    var hello = Vue.extend({
+        template:"#Hello"
+    })
+    //Router
+    var routes = [
+        {path:'/about',component:about},
+        {path:'/hello',component:hello}
+    ],
+    router = new VueRouter({
+        routes:routes,
+    })
+    new Vue({
+        router: router,
+    }).$mount("#app");
+</script>
+</body>
+</html>

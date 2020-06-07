@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路由命名视图</title>
+    <script src="./js/vue.js"></script>
+    <script src="./js/vue-router.js"></script>
+    <style>
+        .menu{text-align: center;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="menu">
+            <router-link to="/About">About</router-link> / 
+            <router-link to="/News">News</router-link> / 
+            <router-link to="/about1">about</router-link>
+        </div>
+        <div>
+            <router-view></router-view>
+            <router-view name="aboutHead"></router-view>
+            <router-view name="aboutContent"></router-view>
+        </div>
+    </div>
+    <template id="about">
+        <div>
+            <h4>关于我们</h4>
+            <p>关于我们的详细介绍</p>
+        </div>
+    </template>
+    <template id="aboutHead">
+        <div>
+            <h4>关于我们</h4>
+            <p>muti router-view header</p>
+        </div>
+    </template>
+    <template id="aboutContent">
+        <div>
+            <p>关于我们的详细介绍 muti router-view content</p>
+            <button @click="Back">Back</button>
+        </div>
+    </template>
+    <template id="news">
+        <div>
+            <p>新闻列表</p>
+            <ul>
+                <li></li>
+            </ul>
+        </div>
+    </template>
+    <template id="newsItem">
+        <div>
+            
+        </div>
+    </template>
+    <script>
+        var about = Vue.extend({
+            template:"#about"
+        });
+
+        var aboutHead = Vue.extend({
+            template:"#aboutHead",
+        })
+
+        var aboutContent = Vue.extend({
+            template:"#aboutContent",
+            mounted:function(){
+                console.log("aboutContent mounted...");
+            },
+            methods:{
+                Back:function(){
+                    //编程式导航
+                    this.$router.go(-1);
+                }
+            }
+        })
+
+        var news = Vue.extend({
+            template:"#news",
+        })
+
+        var newsItem = Vue.extend({
+            template:"#newsItem"
+        });
+
+        var routes =[{path:"/About",component:about},
+                    {path:"/News",component:news},
+                    {
+                        path: "/about1", 
+                            components: {
+                                default:about,
+                                aboutHead: aboutHead,
+                                aboutContent: aboutContent,
+                            }
+                        }
+                    ];
+                    
+
+        var router = new VueRouter({
+            routes:routes,
+        })
+
+        var app = new Vue({
+            router: router
+        }).$mount("#app");
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态路由</title>
+    <script src="./js/vue.js"></script>
+    <script src="./js/vue-router.js"></script>
+    <style>
+        .menu{text-align: center;}
+        .content{padding:4px;border:solid 1px #c0c0c0;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="menu">
+            <router-link to="/About">About</router-link> /
+            <router-link :to = "{name:'about'}">About by name</router-link> / 
+            <router-link to = "/about/1">About 1</router-link> / 
+            <router-link :to="{name:'about',params: { id:2 } }">About:1</router-link>
+            <router-link to="/Hello/1">/Hello/1</router-link>
+        </div>
+        <div class="content">
+            <router-view></router-view>
+        </div>
+    </div>
+    <template id="About">
+        <div>
+            <div>关于动态路由</div>
+            <div>params:{{ $route.params }}</div>
+        </div>
+    </template>
+    <template id="hello">
+        <div>
+            <div>动态路由</div>
+            <div>params:{{$route.params}}</div>
+        </div>
+    </template>
+    <script>
+        var about = Vue.extend({
+            template:"#About",
+            mounted:function(){
+                console.log("mounted");
+                console.log(this.$route);
+            }
+        });
+        var hello = Vue.extend({
+            template:'#hello',
+            mounted:function(){
+                console.log("动态路由参数");
+                console.log(this.$route.params.id)
+            }
+        })
+
+        var routes = [
+            {path:'/About',component:about,name:"about"},
+            {path:'/Hello/:id',component:hello,name:'hello'},
+        ];
+
+        var router = new VueRouter({
+            routes:routes,
+        })
+        var app = new Vue({
+            router:router,
+
+        }).$mount("#app");
+    </script>
+</body>
+</html>

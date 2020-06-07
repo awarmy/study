@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路由选项卡</title>
+    <script src="./js/vue.js"></script>
+    <script src="./js/vue-router.js"></script>
+    <style>
+        .menu{width:500px;display:flex;margin:auto;}
+        .menu >a{flex:1;border:solid 1px #c0c0c0;text-align:center;}
+        .content{width:500px;height:500px;background:rgba(200, 200, 200, 0.7);margin:auto;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="menu">
+            <router-link to="/html">HTML</router-link>
+            <router-link to="/js">JAVASCRIPT</router-link>
+            <router-link to="/css">CSS</router-link>
+            <router-link to="/vue">VUE</router-link>
+        </div>
+        <div>
+            <router-view></router-view>
+        </div>
+    </div>  
+    <template id="content">
+        <div class="content">
+            {{txt}}
+        </div>
+    </template>  
+    <script>
+        var content = Vue.extend({
+            template:"#content",
+            props:['txt']
+        });
+        var routes = [
+            //路由组件传参
+            {path:'/html',component:content,props:{'txt':'HTML'}},
+            {path:'/js',component:content, props: { 'txt': 'javascript' }},
+            {path:'/css',component:content, props: { 'txt': 'CSS' }},
+            { path: '/vue', component: content, props: { 'txt': 'Vue' } },
+        ];
+        var router = new VueRouter({
+            routes:routes,
+        });
+
+        var app = new Vue({
+            router:router,
+        }).$mount("#app");
+    </script>
+</body>
+</html>

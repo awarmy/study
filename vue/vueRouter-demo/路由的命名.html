@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路由的命名</title>
+    <script src="./js/vue.js"></script>
+    <script src="./js/vue-router.js"></script>
+    <style>
+        .menu{text-align:center;}
+        .content{padding:4px;border:solid 1px #c0c0c0;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="menu">
+            <router-link to="/about">About</router-link> / 
+            <router-link to="/hello">Hello</router-link> /
+            <router-link :to="{name:'about'}">About by name</router-link> /
+            <router-link :to="{name:'hello'}">Hello by name</router-link>
+        </div>
+        <p>通过路由名称引入路由，向属性传入一个对象显示的申明路由的名称</p>
+        <div class="content">
+            <router-view></router-view>
+        </div>
+        
+    </div>
+    <template id="About">
+        <div>
+            Router About
+        </div>
+    </template>
+    <template id="Hello">
+        <div>
+            Hello World!
+        </div>
+    </template>
+    <script>
+        var about = Vue.extend({
+            template:"#About"
+        });
+        var hello = Vue.extend({
+            template:"#Hello"
+        });
+        var routes = [
+            {path:'/about',component:about, name:"about"},
+            {path:"/hello",component:hello, name:"hello"}
+        ];
+
+        var router = new VueRouter({
+            routes:routes,
+        })
+        new Vue({
+            router:router,
+        }).$mount("#app");
+    </script>
+</body>
+</html>

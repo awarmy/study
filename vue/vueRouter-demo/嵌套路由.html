@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>签到路由</title>
+    <script src="./js/vue.js"></script>
+    <script src="./js/vue-router.js"></script>
+    <style>
+        .menu{text-align:center;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="menu">
+            <router-link to="/about">About</router-link> / 
+            <router-link to="/news">News</router-link>
+        </div>
+        <div>
+            <router-view></router-view>
+        </div>
+    </div>
+    <!--关于我们-->
+    <template id="about">
+        <div>
+            <h4>About</h4>
+            <p>About content</p>
+        </div>
+    </template>
+    <!--新闻列表-->
+    <template id="newsCenter">
+        <div>
+            <h4>News Center</h4>
+            <ul>
+                <li>
+                    <router-link v-bind:to="{path:'/news/1'}"> news 1</router-link> / 
+                    <router-link v-bind:to="{path:'/news/1/common'}">评论</router-link>
+                </li>
+            </ul>
+            <router-view></router-view>
+        </div>
+    </template>
+    <!--新闻的详细内容-->
+    <template id="news">
+        <div>
+            <h4>News Title -- {{$route.params.id}}</h4>
+            <p>new content</p>
+        </div>
+    </template>
+    <!--新闻评论-->
+    <template id="common">
+        <div>
+            <p>昵称：warmy</p>
+            <p>日期：2020-06-01</p>
+            <p>内容：评论内容，详解介绍</p>
+        </div>
+    </template>
+
+    <script>
+        var about = Vue.extend({
+            template:"#about",
+            mounted:function(){
+                console.log("about component mounted");
+            }
+        });
+        //新闻中心
+        var news = Vue.extend({
+            template:"#newsCenter",
+            mounted:function(){
+                console.log("news center component");
+            }
+        })
+        //新闻内容
+        var newsItem = Vue.extend({
+            template:"#news"
+        });
+        //新闻评论
+        var newItemComon = Vue.extend({
+            template:"#common"
+        })
+        
+        //路由列表
+        var routes = [
+            {path:'/about',component:about,name:"about"},
+            {path:'/news',component:news,name:'news',
+                children: [
+                    { path: "/news/:id",component:newsItem,name:"newsItem" },
+                    //相对路径
+                    // { path: ":id", component: newsItem, name: "newsItem" },
+                    { path: "/news/:id/common",component: newItemComon}
+                ]
+            },
+        ];
+        //路由
+        var router = new VueRouter({
+            routes:routes,
+        });
+
+        var app = new Vue({
+            router:router,
+        }).$mount("#app");
+
+    </script>
+</body>
+</html>
